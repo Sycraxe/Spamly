@@ -2,12 +2,13 @@
   "name": "feur",
   "version": "1.0.0",
   "description": "Robot that answer feur when you say quoi",
-  "main": "index.js",
+  "main": "index.ts",
   "author": "Sycraxe",
   "license": "MIT",
   "dependencies": {
     "discord.js": "^14.7.1",
     "sequelize": "^6.26.0",
-    "sqlite3": "^5.1.2"
+    "sqlite3": "^5.1.2",
+    "typescript": "^4.9.5"
   }
 }

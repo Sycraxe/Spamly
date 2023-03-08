@@ -1,5 +1,5 @@
 const fs = require('node:fs')
-const Sequelize = require('sequelize')
+const { Sequelize } = require('sequelize')
 const { Client, Collection, GatewayIntentBits } = require('discord.js')
 const { token } = require('./config.json')
 
@@ -36,7 +36,7 @@ const AutoRole = sequelize.define('autorole', {
 
 // Rassemble les commandes en une collection
 client.commands = new Collection()
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'))
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`)
 	client.commands.set(command.data.name, command)
