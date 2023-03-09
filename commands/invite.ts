@@ -23,13 +23,22 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('list')
-                .setDescription("Liste les invitations")),
+                .setDescription("Liste les invitations"))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('delete')
+                .setDescription("Supprime une invitation")
+                .addStringOption(option =>
+                    option
+                        .setName('invite')
+                        .setDescription("Le lien ou le code d'invitation")
+                        .setRequired(true))),
 
     async execute(interaction) {
-        const channel = interaction.options.getChannel('channel')
-        const age = interaction.options.getInteger('age')
 
         if (interaction.options.getSubcommand() === 'create') {
+            const channel = interaction.options.getChannel('channel')
+            const age = interaction.options.getInteger('age')
 
             await interaction.guild.invites.create(channel.id, {maxAge: age})
 
@@ -60,6 +69,35 @@ module.exports = {
                     .setFooter({ text: `Pour plus d'informations concernant ${interaction.client.user.username}, exécutez la commande /help` })
                 ]
             })
+        } else if (interaction.options.getSubcommand() === 'delete') {
+            const string = interaction.options.getString('invite')
+
+            const code = string.match(/(https?:\/\/)?(discord\.gg\/)?(.*)/)[3]
+            try {
+                const invite = await interaction.guild.invites.fetch({code: code, force: true}).then()
+                invite.delete()
+
+                return interaction.reply({ embeds: [
+                        new EmbedBuilder()
+                            .setColor('#16161d')
+                            .setTitle('Invite')
+                            .setDescription('L\'invitation fournie a été supprimée avec succès')
+                            .setFooter({ text: `Pour plus d'informations concernant ${interaction.client.user.username}, exécutez la commande /help` })
+                    ]
+                })
+
+            } catch {
+
+                return interaction.reply({ embeds: [
+                        new EmbedBuilder()
+                            .setColor('#16161d')
+                            .setTitle('Invite')
+                            .setDescription('L\'invitation fournie n\'est pas valide')
+                            .setFooter({ text: `Pour plus d'informations concernant ${interaction.client.user.username}, exécutez la commande /help` })
+                    ]
+                })
+
+            }
         }
     }
 }
