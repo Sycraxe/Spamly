@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder} = require('discord.js')
+const { SlashCommandBuilder } = require('discord.js')
+const { StandardEmbed } = require('../embed.ts')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -48,11 +49,9 @@ module.exports = {
         }
 
         return interaction.reply({ embeds: [
-            new EmbedBuilder()
-                .setColor('#16161d')
+            new StandardEmbed()
                 .setTitle('AutoRole')
                 .setDescription(message + ' Vous pouvez consulter la liste à tout moment avec /unknown')
-                .setFooter({ text: `Pour plus d'informations concernant ${interaction.client.user.username}, exécutez la commande /help` })
             ]
         })
 
