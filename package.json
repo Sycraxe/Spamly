@@ -1,14 +1,14 @@
 {
-  "name": "feur",
+  "name": "spamly",
   "version": "1.0.0",
-  "description": "Robot that answer feur when you say quoi",
+  "description": "Personnal Discord bot that combine useful features",
   "main": "index.ts",
   "author": "Sycraxe",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^14.7.1",
-    "sequelize": "^6.26.0",
-    "sqlite3": "^5.1.2",
-    "typescript": "^4.9.5"
+    "discord.js": "^14.7.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
   }
 }

@@ -24,7 +24,7 @@ module.exports = {
                         .setDescription('Le rôle à retirer')
                         .setRequired(true))),
 
-    async execute(interaction, AutoRole) {
+    async execute(interaction, serversAutoRole) {
         const role = interaction.options.getRole('role')
 
         let message = ""
@@ -32,20 +32,31 @@ module.exports = {
         await interaction.client.user.fetch()
 
         if (interaction.options.getSubcommand() === 'add') {
-            try {
-                await AutoRole.create({ role_id: role.id, guild_id : interaction.guild.id })
-                message = `**Le rôle <@&${role.id}> a été ajouté à la liste des rôles automatiques avec succès.**`
+            if (!serversAutoRole[interaction.guild.id]) {
+                serversAutoRole[interaction.guild.id] = []
             }
-            catch (error) {
-                if (error.name === 'SequelizeUniqueConstraintError') message = `**Le rôle <@&${role.id}> est déjà présent dans la liste des rôles automatiques.**`
-                else message = `**Le rôle <@&${role.id}> n'a pas pu être ajouté dans la liste des rôles automatiques pour une raison inconnue.**`
+
+            if (!serversAutoRole[interaction.guild.id].includes(role.id)) {
+                serversAutoRole[interaction.guild.id].push(role.id)
+                message = `**Le rôle <@&${role.id}> a été ajouté à la liste des rôles automatiques avec succès.**`
+            } else {
+                message = `**Le rôle <@&${role.id}> est déjà présent dans la liste des rôles automatiques.**`
             }
         }
 
         else if (interaction.options.getSubcommand() === 'remove') {
-            const rowCount = await AutoRole.destroy({ where: { role_id: role.id, guild_id : interaction.guild.id } })
-            if (!rowCount) message = `**Le rôle <@&${role.id}> n'est pas présent dans la liste des rôles automatiques.**`
-            else message = `**Le rôle <@&${role.id}> a bien été retiré de la liste des rôles automatiques.**`
+
+            if (!serversAutoRole[interaction.guild.id]) {
+                serversAutoRole[interaction.guild.id] = []
+            }
+
+            if (serversAutoRole[interaction.guild.id].includes(role.id)) {
+                serversAutoRole[interaction.guild.id].splice(serversAutoRole[interaction.guild.id].indexOf(role.id), 1)
+                message = `**Le rôle <@&${role.id}> a bien été retiré de la liste des rôles automatiques.**`
+            } else {
+                message = `**Le rôle <@&${role.id}> n'est pas présent dans la liste des rôles automatiques.**`
+            }
+
         }
 
         return interaction.reply({ embeds: [

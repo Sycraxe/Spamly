@@ -1,8 +1,6 @@
 const fs = require('node:fs')
-const { Sequelize } = require('sequelize')
 const { Client, Collection, GatewayIntentBits } = require('discord.js')
 const { token } = require('./config.json')
-
 
 const client = new Client({
 	intents: [
@@ -13,23 +11,7 @@ const client = new Client({
 	]
 })
 
-const sequelize = new Sequelize('database', 'user', 'password', {
-	host: 'localhost',
-	dialect: 'sqlite',
-	logging: false,
-	storage: 'database.sqlite',
-})
-
-const AutoRole = sequelize.define('autorole', {
-	role_id: {
-		type: Sequelize.INTEGER,
-		unique: true,
-		primaryKey: true
-	},
-	guild_id: {
-		type: Sequelize.INTEGER
-	}
-})
+let serversAutoRole = {}
 
 client.commands = new Collection()
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'))
@@ -39,7 +21,6 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () => {
-	AutoRole.sync();
 	console.log('Prêt!')
 })
 
@@ -52,7 +33,7 @@ client.on('interactionCreate', async interaction => {
 	}
 
 	try {
-		await command.execute(interaction, AutoRole)
+		await command.execute(interaction, serversAutoRole)
 	} catch (error) {
 		console.error(error)
 		await interaction.reply({
@@ -63,10 +44,8 @@ client.on('interactionCreate', async interaction => {
 })
 
 client.on('guildMemberAdd', async member => {
-	for (const value of member.guild.roles.cache) {
-		const entry = await AutoRole.findOne({ where: { role_id: value[0], guild_id : member.guild.id }})
-		if (entry && entry.dataValues.guild_id == member.guild.id) {
-			let role = member.guild.roles.cache.find(role => role.id == entry.dataValues.role_id)
+	for (const role of member.guild.roles.cache) {
+		if (serversAutoRole[member.guild.id].includes(role[0])) {
 			await member.roles.add(role)
 		}
 	}
