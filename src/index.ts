@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
-import { token } from './config.json';
+import { token } from '../saves/config.json';
 
 const client = new Client({
 	intents: [
@@ -14,7 +14,7 @@ const client = new Client({
 let serversAutoRole = {}
 
 client.commands = new Collection()
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'))
+const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.ts'))
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`)
 	client.commands.set(command.data.name, command)

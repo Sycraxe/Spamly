@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js")
+import { EmbedBuilder } from 'discord.js';
 
 export class StandardEmbed extends EmbedBuilder {
     constructor() {

@@ -1,4 +1,4 @@
 node_modules
-config.json
+saves/config.json
 package-lock.json
 .idea

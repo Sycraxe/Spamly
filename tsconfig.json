@@ -5,9 +5,9 @@
         "resolveJsonModule": true
     },
     "include": [
-        "*.ts",
-        "commands/*.ts",
-        "lib/*.ts"
+        "src/*.ts",
+        "src/commands/*.ts",
+        "src/lib/*.ts"
     ],
     "files": [
         "types/common/discord.d.ts"

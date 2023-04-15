@@ -1,13 +1,9 @@
 import * as fs from 'fs';
 
-export interface GuildConfig {
-    prefix: string;
-    // Autres propriétés de configuration spécifiques au serveur
-}
+export interface GuildConfig {}
 
 export interface BotData {
-    guilds: Record<string, GuildConfig>; // Enregistre la configuration de chaque serveur par ID
-    // Autres données que vous souhaitez stocker
+    guilds: Record<string, GuildConfig>;
 }
 
 export class JSONDataHandler {
