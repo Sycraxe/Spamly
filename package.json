@@ -1,14 +1,17 @@
 {
   "name": "spamly",
   "version": "1.0.0",
-  "description": "Personnal Discord bot that combine useful features",
+  "description": "Personal Discord bot that combine useful features",
   "main": "index.ts",
   "author": "Sycraxe",
   "license": "MIT",
-  "dependencies": {
-    "discord.js": "^14.7.1"
-  },
   "devDependencies": {
     "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "start": "ts-node ."
+  },
+  "dependencies": {
+    "discord.js": "^14.9.0"
   }
 }

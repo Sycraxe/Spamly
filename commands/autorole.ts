@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js')
-const { StandardEmbed } = require('../utils/embed.ts')
+import { StandardEmbed } from "../lib/embed"
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -28,8 +28,6 @@ module.exports = {
         const role = interaction.options.getRole('role')
 
         let message = ""
-
-        await interaction.client.user.fetch()
 
         if (interaction.options.getSubcommand() === 'add') {
             if (!serversAutoRole[interaction.guild.id]) {

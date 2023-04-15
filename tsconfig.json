@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "CommonJS",
+        "resolveJsonModule": true
+    },
+    "include": [
+        "*.ts",
+        "commands/*.ts",
+        "lib/*.ts"
+    ],
+    "files": [
+        "types/common/discord.d.ts"
+    ]
+}

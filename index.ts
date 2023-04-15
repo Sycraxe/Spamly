@@ -1,6 +1,6 @@
-const fs = require('node:fs')
-const { Client, Collection, GatewayIntentBits } = require('discord.js')
-const { token } = require('./config.json')
+import * as fs from 'fs';
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { token } from './config.json';
 
 const client = new Client({
 	intents: [
@@ -20,7 +20,7 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command)
 }
 
-client.once('ready', () => {
+client.once('ready', async () => {
 	console.log('Prêt!')
 })
 
