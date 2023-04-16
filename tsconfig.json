@@ -7,7 +7,7 @@
     "include": [
         "src/*.ts",
         "src/commands/*.ts",
-        "src/lib/*.ts"
+        "src/class/*.ts"
     ],
     "files": [
         "types/common/discord.d.ts"

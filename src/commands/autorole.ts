@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { StandardEmbed } from '../lib/embed';
+import { StandardEmbed } from '../class/StandardEmbed';
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -24,18 +24,14 @@ module.exports = {
                         .setDescription('Le rôle à retirer')
                         .setRequired(true))),
 
-    async execute(interaction, serversAutoRole) {
+    async execute(interaction) {
         const role = interaction.options.getRole('role')
 
         let message = ""
 
         if (interaction.options.getSubcommand() === 'add') {
-            if (!serversAutoRole[interaction.guild.id]) {
-                serversAutoRole[interaction.guild.id] = []
-            }
-
-            if (!serversAutoRole[interaction.guild.id].includes(role.id)) {
-                serversAutoRole[interaction.guild.id].push(role.id)
+            if (!interaction.guild.data.autorole.roles.has(role.id)) {
+                interaction.guild.data.autorole.add(role)
                 message = `**Le rôle <@&${role.id}> a été ajouté à la liste des rôles automatiques avec succès.**`
             } else {
                 message = `**Le rôle <@&${role.id}> est déjà présent dans la liste des rôles automatiques.**`
@@ -43,13 +39,8 @@ module.exports = {
         }
 
         else if (interaction.options.getSubcommand() === 'remove') {
-
-            if (!serversAutoRole[interaction.guild.id]) {
-                serversAutoRole[interaction.guild.id] = []
-            }
-
-            if (serversAutoRole[interaction.guild.id].includes(role.id)) {
-                serversAutoRole[interaction.guild.id].splice(serversAutoRole[interaction.guild.id].indexOf(role.id), 1)
+            if (interaction.guild.data.autorole.roles.has(role.id)) {
+                interaction.guild.data.autorole.remove(role)
                 message = `**Le rôle <@&${role.id}> a bien été retiré de la liste des rôles automatiques.**`
             } else {
                 message = `**Le rôle <@&${role.id}> n'est pas présent dans la liste des rôles automatiques.**`

@@ -1,8 +1,9 @@
 import * as fs from 'fs';
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { Collection, GatewayIntentBits } from 'discord.js';
 import { token } from '../saves/config.json';
+import { DatabaseClient } from "./class/DatabaseClient";
 
-const client = new Client({
+const client = new DatabaseClient({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
@@ -10,8 +11,6 @@ const client = new Client({
 		GatewayIntentBits.GuildMembers
 	]
 })
-
-let serversAutoRole = {}
 
 client.commands = new Collection()
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.ts'))
@@ -33,7 +32,7 @@ client.on('interactionCreate', async interaction => {
 	}
 
 	try {
-		await command.execute(interaction, serversAutoRole)
+		await command.execute(interaction)
 	} catch (error) {
 		console.error(error)
 		await interaction.reply({
@@ -44,11 +43,9 @@ client.on('interactionCreate', async interaction => {
 })
 
 client.on('guildMemberAdd', async member => {
-	for (const role of member.guild.roles.cache) {
-		if (serversAutoRole[member.guild.id].includes(role[0])) {
-			await member.roles.add(role)
-		}
-	}
+	member.guild.data.autorole.roles.forEach((role) => {
+		member.roles.add(role)
+	})
 })
 
 client.login(token)
