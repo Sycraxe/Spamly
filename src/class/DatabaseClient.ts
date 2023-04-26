@@ -1,6 +1,7 @@
-import {Client, Guild, Collection, Role} from 'discord.js';
+import {Client, Guild, Collection} from 'discord.js';
 
 export class DatabaseClient extends Client {
+
     constructor(options) {
         super(options);
 
@@ -16,31 +17,42 @@ export class DatabaseClient extends Client {
 }
 
 export class DatabaseManager {
-    guild: Guild
-    autorole: AutoroleManager
+    public readonly guild: Guild
+    private collections: Collection<string, Collection<any, any>>
 
     constructor(guild) {
         this.guild = guild
-        this.autorole = new AutoroleManager()
+        this.collections = new Collection()
     }
 
-}
-
-class AutoroleManager {
-    public state: boolean
-    public roles: Collection<string, Role>
-
-    constructor() {
-        this.state = false
-        this.roles = new Collection()
+    public create(dataset: string) {
+        this.collections.set(dataset, new Collection<any, any>)
     }
 
-
-    public add(role: Role): void {
-        this.roles.set(role.id, role)
+    public delete(dataset: string): boolean {
+        return this.collections.delete(dataset)
     }
 
-    public remove(role: Role): void {
-        this.roles.delete(role.id)
+    public set(dataset: string, key: string, value: any): void {
+        this.collections.get(dataset).set(key, value)
     }
+
+    public get(dataset: string, key: string): any {
+        if (!this.exists(dataset)) {
+            return undefined
+        }
+        return this.collections.get(dataset).get(key)
+    }
+
+    public exists(dataset: string): boolean {
+        return this.collections.has(dataset)
+    }
+
+    public forEach(dataset: string, callback: (value: any, key: string) => void) {
+        if (!this.exists(dataset)) {
+            return
+        }
+        this.collections.get(dataset).forEach(callback)
+    }
+
 }

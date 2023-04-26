@@ -30,8 +30,10 @@ module.exports = {
         let message = ""
 
         if (interaction.options.getSubcommand() === 'add') {
-            if (!interaction.guild.data.autorole.roles.has(role.id)) {
-                interaction.guild.data.autorole.add(role)
+            if (!interaction.guild.data.exists('autorole')) interaction.guild.data.create('autorole')
+
+            if (!interaction.guild.data.get('autorole', role.id)) {
+                interaction.guild.data.set('autorole', role.id, true)
                 message = `**Le rôle <@&${role.id}> a été ajouté à la liste des rôles automatiques avec succès.**`
             } else {
                 message = `**Le rôle <@&${role.id}> est déjà présent dans la liste des rôles automatiques.**`
@@ -39,8 +41,10 @@ module.exports = {
         }
 
         else if (interaction.options.getSubcommand() === 'remove') {
-            if (interaction.guild.data.autorole.roles.has(role.id)) {
-                interaction.guild.data.autorole.remove(role)
+            if (!interaction.guild.data.exists('autorole')) interaction.guild.data.create('autorole')
+
+            if (interaction.guild.data.get('autorole', role.id)) {
+                interaction.guild.data.set('autorole', role.id, false)
                 message = `**Le rôle <@&${role.id}> a bien été retiré de la liste des rôles automatiques.**`
             } else {
                 message = `**Le rôle <@&${role.id}> n'est pas présent dans la liste des rôles automatiques.**`
