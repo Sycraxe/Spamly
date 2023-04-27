@@ -27,6 +27,7 @@ module.exports = {
     async execute(interaction) {
         const role = interaction.options.getRole('role')
 
+        interaction.guild.data.load('autorole')
         let message = ""
 
         if (interaction.options.getSubcommand() === 'add') {
@@ -51,6 +52,8 @@ module.exports = {
             }
 
         }
+
+        interaction.guild.data.save('autorole')
 
         return interaction.reply({ embeds: [
             new StandardEmbed()

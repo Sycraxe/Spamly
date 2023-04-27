@@ -9,8 +9,8 @@ const client = new DatabaseClient({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
 		GatewayIntentBits.GuildMembers
-	]
-})
+	]},
+	"./saves")
 
 client.commands = new Collection()
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.ts'))
