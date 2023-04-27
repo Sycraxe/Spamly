@@ -27,7 +27,7 @@ module.exports = {
     async execute(interaction) {
         const role = interaction.options.getRole('role')
 
-        interaction.guild.data.load('autorole')
+        if (!interaction.guild.data.exists('autorole')) interaction.guild.data.load('autorole')
         let message = ""
 
         if (interaction.options.getSubcommand() === 'add') {

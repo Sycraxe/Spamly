@@ -93,7 +93,6 @@ export class DatabaseManager {
                 this.collections.get(dataset).set(key, json[key]);
             }
 
-            console.log(this.collections.get(dataset));
             return true
         }
         catch (error) {
