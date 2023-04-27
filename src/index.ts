@@ -43,10 +43,13 @@ client.on('interactionCreate', async interaction => {
 })
 
 client.on('guildMemberAdd', async member => {
-	if (!member.guild.data.exists('autorole')) return
-	member.guild.data.forEach('autorole', (role) => {
-		role = member.guild.roles.cache.get(role)
+	if (!member.guild.data.exists('autorole')) member.guild.data.load('autorole')
+	member.guild.data.forEach('autorole', (value, key) => {
+		if (!value) return
+
+		let role = member.guild.roles.cache.get(key)
 		if (!role) return
+
 		member.roles.add(role)
 	})
 })
