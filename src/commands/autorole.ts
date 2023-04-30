@@ -27,14 +27,11 @@ module.exports = {
     async execute(interaction) {
         const role = interaction.options.getRole('role')
 
-        if (!interaction.guild.data.exists('autorole')) interaction.guild.data.load('autorole')
         let message = ""
 
         if (interaction.options.getSubcommand() === 'add') {
-            if (!interaction.guild.data.exists('autorole')) interaction.guild.data.create('autorole')
-
-            if (!interaction.guild.data.get('autorole', role.id)) {
-                interaction.guild.data.set('autorole', role.id, true)
+            if (!interaction.guild.storage.data.autorole.roles.includes(role.id)) {
+                interaction.guild.storage.data.autorole.roles.push(role.id)
                 message = `**Le rôle <@&${role.id}> a été ajouté à la liste des rôles automatiques avec succès.**`
             } else {
                 message = `**Le rôle <@&${role.id}> est déjà présent dans la liste des rôles automatiques.**`
@@ -42,10 +39,9 @@ module.exports = {
         }
 
         else if (interaction.options.getSubcommand() === 'remove') {
-            if (!interaction.guild.data.exists('autorole')) interaction.guild.data.create('autorole')
-
-            if (interaction.guild.data.get('autorole', role.id)) {
-                interaction.guild.data.set('autorole', role.id, false)
+            if (interaction.guild.storage.data.autorole.roles.includes(role.id)) {
+                let index = interaction.guild.storage.data.autorole.roles.indexOf(role.id)
+                interaction.guild.storage.data.autorole.roles.splice(index)
                 message = `**Le rôle <@&${role.id}> a bien été retiré de la liste des rôles automatiques.**`
             } else {
                 message = `**Le rôle <@&${role.id}> n'est pas présent dans la liste des rôles automatiques.**`
@@ -53,7 +49,7 @@ module.exports = {
 
         }
 
-        interaction.guild.data.save('autorole')
+        interaction.guild.storage.save()
 
         return interaction.reply({ embeds: [
             new StandardEmbed()

@@ -1,7 +1,13 @@
 import * as fs from 'fs';
 import { Collection, GatewayIntentBits } from 'discord.js';
 import { token } from '../saves/config.json';
-import { DatabaseClient } from "./class/DatabaseClient";
+import {DatabaseClient, DatabaseManager} from "./class/DataClient";
+
+function init(storage: DatabaseManager) {
+	if (storage.data.autorole === undefined) storage.data.autorole = {}
+	if (storage.data.autorole.roles === undefined) storage.data.autorole.roles = []
+	if (storage.data.autorole.enabled === undefined) storage.data.autorole.enabled = true
+}
 
 const client = new DatabaseClient({
 	intents: [
@@ -10,7 +16,7 @@ const client = new DatabaseClient({
 		GatewayIntentBits.MessageContent,
 		GatewayIntentBits.GuildMembers
 	]},
-	"./saves")
+	"./saves", init)
 
 client.commands = new Collection()
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.ts'))
@@ -43,13 +49,10 @@ client.on('interactionCreate', async interaction => {
 })
 
 client.on('guildMemberAdd', async member => {
-	if (!member.guild.data.exists('autorole')) member.guild.data.load('autorole')
-	member.guild.data.forEach('autorole', (value, key) => {
-		if (!value) return
-
-		let role = member.guild.roles.cache.get(key)
+	if (!member.guild.storage.data.autorole.enabled) return
+	member.guild.storage.data.autorole.roles.forEach((id) => {
+		let role = member.guild.roles.cache.get(id)
 		if (!role) return
-
 		member.roles.add(role)
 	})
 })
