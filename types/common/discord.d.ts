@@ -1,5 +1,5 @@
 import { Collection } from 'discord.js';
-import { DatabaseManager } from '../../src/class/DataClient';
+import { DatabaseManager } from '../../src/core/DatabaseClient';
 
 declare module 'discord.js' {
     export interface Client {

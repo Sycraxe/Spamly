@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { StandardEmbed } from '../class/StandardEmbed';
+import { StandardEmbed } from '../core/StandardEmbed';
 
 module.exports = {
     data: new SlashCommandBuilder()

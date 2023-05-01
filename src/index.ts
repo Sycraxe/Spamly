@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { Collection, GatewayIntentBits } from 'discord.js';
 import { token } from '../saves/config.json';
-import {DatabaseClient, DatabaseManager} from "./class/DataClient";
+import { DatabaseClient, DatabaseManager } from "./core/DatabaseClient";
 
 function init(storage: DatabaseManager) {
 	if (storage.data.autorole === undefined) storage.data.autorole = {}

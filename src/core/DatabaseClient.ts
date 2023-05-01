@@ -1,4 +1,4 @@
-import {Client, Guild} from 'discord.js';
+import { Client, Guild } from 'discord.js';
 import * as fs from 'fs';
 
 export class DatabaseClient extends Client {
