@@ -1,4 +1,5 @@
 export const InteractionMenu = {
-    Default : 0,
-    AutoroleDefault: 10
+    AutoroleModify: 'Au01',
+    AutoroleToggle: 'Au02',
+    AutoroleChoose: 'Au03',
 };

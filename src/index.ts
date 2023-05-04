@@ -7,7 +7,6 @@ function init(storage: DatabaseManager) {
 	if (storage.data.autorole === undefined) storage.data.autorole = {}
 	if (storage.data.autorole.roles === undefined) storage.data.autorole.roles = []
 	if (storage.data.autorole.state === undefined) storage.data.autorole.state = true
-	if (storage.data.interaction === undefined) storage.data.interaction = {}
 }
 
 const client = new DatabaseClient({

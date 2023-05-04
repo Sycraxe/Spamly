@@ -1,4 +1,6 @@
 import {Events} from 'discord.js';
+import {InteractionMenu} from "../core/InteractionMenu";
+import {AutoroleMainMenu, AutoroleModifyMenu} from "../menus/autorole";
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -22,46 +24,26 @@ module.exports = {
             }
         }
 
-        if (interaction.isButton()) {
-            //
-            // const collectorFilter = i => i.user.id === interaction.user.id;
-            //
-            // try {
-            //     const confirmation = await response.awaitMessageComponent({filter: collectorFilter});
-            //
-            //     if (confirmation.customId === 'add') {
-            //         await interaction.editReply({
-            //             embeds: [
-            //                 new StandardEmbed()
-            //                     .setTitle('Autorole')
-            //                     .setDescription('Tu veux en ajouter un, d\'accord mais lequel ?')
-            //             ],
-            //             components: []
-            //         });
-            //     }
-            //     else if (confirmation.customId ==='remove') {
-            //         await interaction.editReply({
-            //             embeds: [
-            //                 new StandardEmbed()
-            //                     .setTitle('Autorole')
-            //                     .setDescription('Tu veux en enlever un, d\'accord mais lequel ?')
-            //             ],
-            //             components: []
-            //         });
-            //     }
-            //
-            //
-            // } catch (e) {
-            //     await interaction.editReply({
-            //         embeds: [
-            //             new StandardEmbed()
-            //                 .setTitle('Autorole')
-            //                 .setDescription('Nope')
-            //         ],
-            //         components: []
-            //     });
-            // }
-        }
+        else {
+            switch (interaction.customId) {
+                case InteractionMenu.AutoroleToggle:
+                    interaction.guild.storage.data.autorole.state = (!interaction.guild.storage.data.autorole.state)
+                    interaction.guild.storage.save()
 
-    },
-};
+                    await interaction.update(AutoroleMainMenu(interaction))
+                    break
+
+                case InteractionMenu.AutoroleModify:
+                    await interaction.update(AutoroleModifyMenu(interaction))
+                    break
+
+                case InteractionMenu.AutoroleChoose:
+                    interaction.guild.storage.data.autorole.roles = interaction.values
+                    interaction.guild.storage.save()
+
+                    await interaction.update(AutoroleMainMenu(interaction))
+                    break
+            }
+        }
+    }
+}
