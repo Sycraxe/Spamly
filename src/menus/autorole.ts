@@ -23,6 +23,13 @@ export function AutoroleMainMenu(interaction) {
                         .setCustomId(InteractionMenu.AutoroleToggle)
                         .setLabel((interaction.guild.storage.data.autorole.state ? 'Désa' : 'A') + 'ctiver les rôles automatiques')
                         .setStyle(ButtonStyle.Secondary)
+                ),
+            new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(InteractionMenu.AutoroleClose)
+                        .setLabel('Fermer le gestionnaire')
+                        .setStyle(ButtonStyle.Danger)
                 )
         ]
     }
@@ -38,21 +45,28 @@ export function AutoroleModifyMenu(interaction) {
         })
     })
 
-    let roles = new ActionRowBuilder()
-        .addComponents(
-            new StringSelectMenuBuilder()
-                .setCustomId(InteractionMenu.AutoroleChoose)
-                .setMinValues(0)
-                .setMaxValues(options.length)
-                .addOptions(options)
-        )
-
     return {
         embeds: [
             new StandardEmbed()
                 .setTitle('Rôles automatiques')
                 .setDescription('Veuillez modifier la liste des rôles automatiques.')
         ],
-        components: [roles]
+        components: [
+            new ActionRowBuilder()
+                .addComponents(
+                    new StringSelectMenuBuilder()
+                        .setCustomId(InteractionMenu.AutoroleChoose)
+                        .setMinValues(0)
+                        .setMaxValues(options.length)
+                        .addOptions(options)
+                ),
+            new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(InteractionMenu.AutorolePass)
+                        .setLabel('Fermer la sélection')
+                        .setStyle(ButtonStyle.Danger)
+                )
+        ]
     }
 }
