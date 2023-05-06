@@ -44,11 +44,14 @@ module.exports = {
                     await interaction.update(AutoroleMainMenu(interaction))
                     break
 
-                case InteractionMenu.AutoroleClose:
-                    await interaction.message.delete()
+                case InteractionMenu.AutoroleBlank:
+                    interaction.guild.storage.data.autorole.roles = []
+                    interaction.guild.storage.save()
+
+                    await interaction.update(AutoroleMainMenu(interaction))
                     break
 
-                case InteractionMenu.AutorolePass:
+                case InteractionMenu.AutoroleCancel:
                     await interaction.update(AutoroleMainMenu(interaction))
             }
         }

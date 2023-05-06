@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
-import { StandardEmbed } from '../core/StandardEmbed';
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -44,9 +43,11 @@ module.exports = {
             await interaction.guild.invites.create(channel.id, {maxAge: age})
 
             return interaction.reply({ embeds: [
-                    new StandardEmbed()
+                    new EmbedBuilder()
                         .setTitle('Invite')
                         .setDescription('Invitation créée avec succès')
+                        .setColor("#4E5058")
+                        .setFooter({ text: "Pour plus d'informations me concernant, exécutez la commande /help" })
                 ]
             })
 
@@ -60,10 +61,12 @@ module.exports = {
             }
 
             return interaction.reply({ embeds: [
-                new StandardEmbed()
+                new EmbedBuilder()
                     .setTitle('Invite')
                     .setDescription('Voici les différents liens actuellement valides sur le serveur')
                     .setFields(fields)
+                    .setColor("#4E5058")
+                    .setFooter({ text: "Pour plus d'informations me concernant, exécutez la commande /help" })
                 ]
             })
         } else if (interaction.options.getSubcommand() === 'delete') {
@@ -75,18 +78,22 @@ module.exports = {
                 invite.delete()
 
                 return interaction.reply({ embeds: [
-                        new StandardEmbed()
+                        new EmbedBuilder()
                             .setTitle('Invite')
                             .setDescription('L\'invitation fournie a été supprimée avec succès')
+                            .setColor("#4E5058")
+                            .setFooter({ text: "Pour plus d'informations me concernant, exécutez la commande /help" })
                     ]
                 })
 
             } catch {
 
                 return interaction.reply({ embeds: [
-                        new StandardEmbed()
+                        new EmbedBuilder()
                             .setTitle('Invite')
                             .setDescription('L\'invitation fournie n\'est pas valide')
+                            .setColor("#4E5058")
+                            .setFooter({ text: "Pour plus d'informations me concernant, exécutez la commande /help" })
                     ]
                 })
 
