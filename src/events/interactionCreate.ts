@@ -43,6 +43,13 @@ module.exports = {
 
                     await interaction.update(AutoroleMainMenu(interaction))
                     break
+
+                case InteractionMenu.AutoroleClose:
+                    await interaction.message.delete()
+                    break
+
+                case InteractionMenu.AutorolePass:
+                    await interaction.update(AutoroleMainMenu(interaction))
             }
         }
     }
