@@ -1,5 +1,5 @@
-import {Events} from 'discord.js';
-import {InteractionMenu} from "../core/InteractionMenu";
+import {Events, Role} from 'discord.js';
+import {InteractionMenu} from "../const/InteractionMenu";
 import {AutoroleMainMenu, AutoroleModifyMenu} from "../menus/autorole";
 
 module.exports = {
@@ -30,7 +30,12 @@ module.exports = {
                     interaction.guild.storage.data.autorole.state = (!interaction.guild.storage.data.autorole.state)
                     interaction.guild.storage.save()
 
-                    await interaction.update(AutoroleMainMenu(interaction))
+                    if (interaction.guild.storage.data.autorole.state) {
+                        await interaction.update(AutoroleMainMenu(interaction, InteractionMenu.AutoroleEnabled))
+                        break
+                    }
+
+                    await interaction.update(AutoroleMainMenu(interaction, InteractionMenu.AutoroleDisabled))
                     break
 
                 case InteractionMenu.AutoroleModify:
@@ -38,21 +43,34 @@ module.exports = {
                     break
 
                 case InteractionMenu.AutoroleChoose:
+
+                    let warning = false
+                    interaction.roles.forEach((role: Role) => {
+                        if (role.comparePositionTo(interaction.guild.members.me.roles.highest) > 0) {
+                            warning = true
+                        }
+                    })
+
+                    if (warning) {
+                        await interaction.update(AutoroleMainMenu(interaction, InteractionMenu.AutoroleWarning))
+                        break
+                    }
+
                     interaction.guild.storage.data.autorole.roles = interaction.values
                     interaction.guild.storage.save()
 
-                    await interaction.update(AutoroleMainMenu(interaction))
+                    await interaction.update(AutoroleMainMenu(interaction, InteractionMenu.AutoroleModified))
                     break
 
                 case InteractionMenu.AutoroleBlank:
                     interaction.guild.storage.data.autorole.roles = []
                     interaction.guild.storage.save()
 
-                    await interaction.update(AutoroleMainMenu(interaction))
+                    await interaction.update(AutoroleMainMenu(interaction, InteractionMenu.AutoroleModified))
                     break
 
                 case InteractionMenu.AutoroleCancel:
-                    await interaction.update(AutoroleMainMenu(interaction))
+                    await interaction.update(AutoroleMainMenu(interaction, InteractionMenu.AutoroleCanceled))
             }
         }
     }

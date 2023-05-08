@@ -1,15 +1,45 @@
 import {ActionRowBuilder, ButtonBuilder, ButtonStyle, RoleSelectMenuBuilder, EmbedBuilder} from "discord.js";
-import {InteractionMenu} from "../core/InteractionMenu";
+import {InteractionMenu} from "../const/InteractionMenu";
 
-export function AutoroleMainMenu(interaction) {
+export function AutoroleMainMenu(interaction, call = '') {
+
+    let description
+    switch (call) {
+        case InteractionMenu.AutoroleModified:
+            description = "Les rôles ont été modifiés avec succès."
+            description += "\nSouhaitez-vous faire autre chose ?"
+            break
+        case InteractionMenu.AutoroleWarning:
+            description = "Les rôles ont été modifiés avec succès."
+            description += "\n**ATTENTION:** Une partie des rôles sélectionnés ne pourrait pas être attribuée correctement en raison de leur rang trop élevé."
+            description += "\nSouhaitez-vous faire autre chose ?"
+            break
+        case InteractionMenu.AutoroleEnabled :
+            description = "Les rôles automatiques ont été activés avec succès."
+            description += "\nSouhaitez-vous faire autre chose ?"
+            break
+        case InteractionMenu.AutoroleDisabled:
+            description = "Les rôles automatiques ont été désactivés avec succès."
+            description += "\nSouhaitez-vous faire autre chose ?"
+            break
+        case InteractionMenu.AutoroleCanceled:
+            description = "L'opération a été interrompue avec succès."
+            description += "\nSouhaitez-vous faire autre chose ?"
+            break
+        default:
+            description = "Bienvenue dans l'utilitaire de gestion des rôles automatiques."
+            description += "\nQue souhaitez-vous faire ?"
+            break
+    }
+
     return {
         ephemeral: true,
         embeds: [
             new EmbedBuilder()
                 .setTitle('Rôles automatiques')
-                .setDescription('Bienvenue dans l\'utilitaire de gestion des rôles automatiques.\nQue souhaitez-vous faire ?')
+                .setDescription(description)
                 .setColor("#0144af")
-                .setFooter({text: "Si vous souhaitez quitter l'utilitaire, pouvez cliquez sur \"Rejeter le message\"" })
+                .setFooter({text: "Si vous souhaitez quitter l'utilitaire, pouvez cliquez sur 'Rejeter le message'" })
                 .setAuthor({name: interaction.client.user.username, iconURL: interaction.client.user.avatarURL()})
         ],
         components: [
